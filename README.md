@@ -36,7 +36,7 @@ python main.py
 ## Screenshots
 
 ### Example Visualization
-![Example Visualization](./screenshot.png)
+![Example Visualization](./screenshot.PNG)
 
 ## File Structure
 
