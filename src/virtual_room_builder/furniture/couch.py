@@ -108,6 +108,12 @@ class Couch(Furniture):
     def bounds(self) -> Bounds:
         return Bounds.from_vertices(self._placed_vertices())
 
-    def render(self, ax: Axes3D) -> None:
+    def render(self, ax: Axes3D, origin: tuple[float, float] = (0.0, 0.0)) -> None:
         v = self._placed_vertices()
-        add_segments(ax, [(v[i], v[j]) for i, j in self._EDGES], color=self.color, linewidth=1.2)
+        add_segments(
+            ax,
+            [(v[i], v[j]) for i, j in self._EDGES],
+            color=self.color,
+            linewidth=1.2,
+            origin=origin,
+        )

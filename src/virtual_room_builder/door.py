@@ -1,4 +1,4 @@
-"""A doorway marker on a wall."""
+"""A doorway rectangle on a wall."""
 
 from __future__ import annotations
 
@@ -27,6 +27,7 @@ class Door:
     (y = 0) or the north wall (y = room width).
     orientation "vertical" opens along y and must sit on the west wall
     (x = 0) or the east wall (x = room length).
+    name is the id FloorPlan.connect looks up. Unnamed doors cannot be joined.
     """
 
     x: float
@@ -35,6 +36,7 @@ class Door:
     width: float = 2.0
     orientation: str = "horizontal"
     color: str = "red"
+    name: str | None = None
 
     def __post_init__(self) -> None:
         if self.height <= 0:
@@ -81,28 +83,34 @@ class Door:
                 f"y[{bounds.min_y:.2f}, {bounds.max_y:.2f}], "
                 f"z[{bounds.min_z:.2f}, {bounds.max_z:.2f}])"
             )
-        if self.orientation == "horizontal":
-            on_south = self.y == 0
-            on_north = self.y == room_width
-            if not (on_south or on_north):
-                raise InvalidPlacementError(
-                    f"Horizontal door at y={self.y} must sit on the south wall "
-                    f"(y=0) or north wall (y={room_width})"
-                )
-        else:
-            on_west = self.x == 0
-            on_east = self.x == room_length
-            if not (on_west or on_east):
-                raise InvalidPlacementError(
-                    f"Vertical door at x={self.x} must sit on the west wall "
-                    f"(x=0) or east wall (x={room_length})"
-                )
+        self.wall_side(room_length, room_width)
 
-    def render(self, ax: Axes3D) -> None:
+    def wall_side(self, room_length: float, room_width: float) -> str:
+        """Return south, north, west, or east for a door on that wall."""
+        if self.orientation == "horizontal":
+            if self.y == 0:
+                return "south"
+            if self.y == room_width:
+                return "north"
+            raise InvalidPlacementError(
+                f"Horizontal door at y={self.y} must sit on the south wall "
+                f"(y=0) or north wall (y={room_width})"
+            )
+        if self.x == 0:
+            return "west"
+        if self.x == room_length:
+            return "east"
+        raise InvalidPlacementError(
+            f"Vertical door at x={self.x} must sit on the west wall "
+            f"(x=0) or east wall (x={room_length})"
+        )
+
+    def render(self, ax: Axes3D, origin: tuple[float, float] = (0.0, 0.0)) -> None:
         v = self._vertices()
         add_segments(
             ax,
             [(v[0], v[1]), (v[1], v[2]), (v[2], v[3]), (v[3], v[0])],
             color=self.color,
             linewidth=2,
+            origin=origin,
         )

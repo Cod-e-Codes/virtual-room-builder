@@ -20,12 +20,11 @@ _MAX_SEGMENT_LENGTH = 1.0
 
 
 class _ViewDepthLine3DCollection(Line3DCollection):  # type: ignore[misc]
-    """Line collection whose sort depth is the farther floor-plan endpoint.
+    """Line collection whose sort depth is the farther XY endpoint.
 
-    Tall wall pieces then share depth with the floor they stand on, so
-    receding back-wall and back-floor edges stay behind objects in the room.
-    Matplotlib's default uses the closest projected point, which pulls tall
-    back-wall pieces in front when the camera is elevated.
+    Tall wall pieces share depth with the floor they stand on. Matplotlib's
+    default uses the closest projected point, which pulls tall back-wall
+    pieces in front when the camera is elevated.
     """
 
     def do_3d_projection(self) -> float:
@@ -59,10 +58,18 @@ def add_segments(
     *,
     color: str,
     linewidth: float = 1.0,
+    origin: tuple[float, float] = (0.0, 0.0),
 ) -> None:
-    """Add each edge piece as a Line3DCollection sorted by floor-plan depth."""
+    """Add each edge piece as a Line3DCollection sorted by farther XY endpoint.
+
+    origin offsets vertices in world XY.
+    """
+    ox, oy = origin
+    delta = np.array([ox, oy, 0.0], dtype=np.float64)
     for start, end in edges:
-        for piece_start, piece_end in _split_edge(start, end):
+        start_a = np.asarray(start, dtype=np.float64) + delta
+        end_a = np.asarray(end, dtype=np.float64) + delta
+        for piece_start, piece_end in _split_edge(start_a, end_a):
             ax.add_collection3d(
                 _ViewDepthLine3DCollection(
                     [np.asarray([piece_start, piece_end], dtype=np.float64)],

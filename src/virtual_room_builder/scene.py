@@ -41,26 +41,35 @@ class Scene:
         for door in self.doors:
             door.check_fits(self.room.length, self.room.width, self.room.height)
 
-    def render(self, ax: Axes3D) -> None:
+    def render(
+        self,
+        ax: Axes3D,
+        origin: tuple[float, float] = (0.0, 0.0),
+        *,
+        fit_axes: bool = True,
+    ) -> None:
         """Draw the scene onto an existing axes without validating first.
 
         Line segments are Line3DCollections, split along their length. Draw
-        order uses the farther floor-plan end of each piece. Call validate()
-        or figure() when you need containment and placement checks before
-        drawing.
+        order uses the farther XY end of each piece. Call validate() or
+        figure() when you need containment and placement checks before
+        drawing. origin shifts the room in world XY. fit_axes=False leaves
+        axis limits for the caller.
         """
-        self.room.render(ax)
+        self.room.render(ax, origin=origin)
         for door in self.doors:
-            door.render(ax)
+            door.render(ax, origin=origin)
         for item in self.furniture:
-            item.render(ax)
+            item.render(ax, origin=origin)
 
-        ax.set_xlim([0, self.room.length])
-        ax.set_ylim([0, self.room.width])
-        ax.set_zlim([0, self.room.height])
-        ax.set_xlabel("X")
-        ax.set_ylabel("Y")
-        ax.set_zlabel("Z")
+        if fit_axes:
+            ox, oy = origin
+            ax.set_xlim([ox, ox + self.room.length])
+            ax.set_ylim([oy, oy + self.room.width])
+            ax.set_zlim([0, self.room.height])
+            ax.set_xlabel("X")
+            ax.set_ylabel("Y")
+            ax.set_zlabel("Z")
 
     def figure(self) -> Figure:
         """Validate placement then build a matplotlib figure of the scene."""

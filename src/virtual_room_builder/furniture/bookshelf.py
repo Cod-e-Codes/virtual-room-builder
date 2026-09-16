@@ -67,9 +67,9 @@ class Bookshelf(Furniture):
     def bounds(self) -> Bounds:
         return Bounds.from_vertices(self._case_vertices())
 
-    def render(self, ax: Axes3D) -> None:
+    def render(self, ax: Axes3D, origin: tuple[float, float] = (0.0, 0.0)) -> None:
         case = self._case_vertices()
-        self._draw_edges(ax, box_edges(case), self.color, linewidth=1.2)
+        self._draw_edges(ax, box_edges(case), self.color, linewidth=1.2, origin=origin)
 
         if self.num_shelves == 0:
             return
@@ -83,4 +83,4 @@ class Bookshelf(Furniture):
                 (shelf[2], shelf[3]),
                 (shelf[3], shelf[0]),
             ]
-            self._draw_edges(ax, edges, self.shelf_color, linewidth=1.2)
+            self._draw_edges(ax, edges, self.shelf_color, linewidth=1.2, origin=origin)

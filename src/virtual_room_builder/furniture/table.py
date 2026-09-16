@@ -59,7 +59,7 @@ class Table(Furniture):
         floor[:, 2] = 0.0
         return Bounds.from_vertices(np.vstack([top, floor]))
 
-    def render(self, ax: Axes3D) -> None:
+    def render(self, ax: Axes3D, origin: tuple[float, float] = (0.0, 0.0)) -> None:
         top = self._placed_top()
         top_edges = [
             (top[0], top[1]),
@@ -67,11 +67,11 @@ class Table(Furniture):
             (top[2], top[3]),
             (top[3], top[0]),
         ]
-        self._draw_edges(ax, top_edges, self.color, linewidth=1.5)
+        self._draw_edges(ax, top_edges, self.color, linewidth=1.5, origin=origin)
 
         legs = []
         for corner in top:
             bottom = corner.copy()
             bottom[2] = 0.0
             legs.append((bottom, corner))
-        self._draw_edges(ax, legs, self.color, linewidth=1.2)
+        self._draw_edges(ax, legs, self.color, linewidth=1.2, origin=origin)

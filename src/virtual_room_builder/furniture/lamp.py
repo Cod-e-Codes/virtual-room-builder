@@ -38,6 +38,6 @@ class Lamp(Furniture):
     def bounds(self) -> Bounds:
         return Bounds.from_vertices(self._vertices())
 
-    def render(self, ax: Axes3D) -> None:
+    def render(self, ax: Axes3D, origin: tuple[float, float] = (0.0, 0.0)) -> None:
         v = self._vertices()
-        self._draw_edges(ax, box_edges(v), self.color, linewidth=1.2)
+        self._draw_edges(ax, box_edges(v), self.color, linewidth=1.2, origin=origin)

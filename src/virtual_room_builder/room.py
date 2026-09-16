@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class Room:
-    """A rectangular room with the given floor plan and ceiling height.
+    """A rectangular room with the given length, width, and ceiling height.
 
     The room occupies x in [0, length], y in [0, width], z in [0, height].
     """
@@ -34,6 +34,6 @@ class Room:
             if value <= 0:
                 raise InvalidDimensionError(f"Room {name} must be positive, got {value}")
 
-    def render(self, ax: Axes3D) -> None:
+    def render(self, ax: Axes3D, origin: tuple[float, float] = (0.0, 0.0)) -> None:
         vertices = box_vertices(0, 0, 0, self.length, self.width, self.height)
-        add_segments(ax, box_edges(vertices), color=self.wall_color, linewidth=1.5)
+        add_segments(ax, box_edges(vertices), color=self.wall_color, linewidth=1.5, origin=origin)

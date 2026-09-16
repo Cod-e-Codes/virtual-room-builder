@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "virtual-room-builder"
 version = "1.0.0"
-description = "Compose and render simple 3D room layouts with matplotlib."
+description = "Compose and render 3D wireframe rooms and floorplans with matplotlib."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }

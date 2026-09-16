@@ -16,4 +16,4 @@ class OutOfBoundsError(VirtualRoomBuilderError):
 
 
 class InvalidPlacementError(VirtualRoomBuilderError):
-    """An item is not attached to a valid location (for example a door off a wall)."""
+    """A door is off a wall, or a floorplan connection or layout is invalid."""

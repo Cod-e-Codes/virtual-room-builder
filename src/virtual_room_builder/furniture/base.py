@@ -22,8 +22,7 @@ class Furniture(ABC):
     direction is the compass direction the item faces.
 
     All items are drawn as wireframes. Each edge is split into short
-    Line3DCollections. Draw order uses the farther floor-plan end of each
-    piece. Filled faces still z-fight from most camera angles.
+    Line3DCollections. Draw order uses the farther XY end of each piece.
     """
 
     x: float
@@ -64,8 +63,8 @@ class Furniture(ABC):
             )
 
     @abstractmethod
-    def render(self, ax: Axes3D) -> None:
-        """Draw this item onto the 3D axes."""
+    def render(self, ax: Axes3D, origin: tuple[float, float] = (0.0, 0.0)) -> None:
+        """Draw this item onto the 3D axes. origin offsets vertices in world XY."""
 
     def _draw_edges(
         self,
@@ -73,5 +72,6 @@ class Furniture(ABC):
         edges: list[tuple[FloatArray, FloatArray]],
         color: str,
         linewidth: float = 1.0,
+        origin: tuple[float, float] = (0.0, 0.0),
     ) -> None:
-        add_segments(ax, edges, color=color, linewidth=linewidth)
+        add_segments(ax, edges, color=color, linewidth=linewidth, origin=origin)

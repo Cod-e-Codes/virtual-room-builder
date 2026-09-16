@@ -1,4 +1,4 @@
-"""Virtual room builder: compose and render simple 3D room layouts."""
+"""Compose and render 3D wireframe rooms and floorplans."""
 
 from virtual_room_builder.door import Door
 from virtual_room_builder.errors import (
@@ -7,6 +7,7 @@ from virtual_room_builder.errors import (
     OutOfBoundsError,
     VirtualRoomBuilderError,
 )
+from virtual_room_builder.floorplan import FloorPlan
 from virtual_room_builder.furniture.bookshelf import Bookshelf
 from virtual_room_builder.furniture.chair import Chair
 from virtual_room_builder.furniture.couch import Couch
@@ -24,6 +25,7 @@ __all__ = [
     "Couch",
     "Direction",
     "Door",
+    "FloorPlan",
     "InvalidDimensionError",
     "InvalidPlacementError",
     "Lamp",

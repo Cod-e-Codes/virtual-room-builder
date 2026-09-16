@@ -6,13 +6,19 @@ import argparse
 import sys
 
 from virtual_room_builder.errors import VirtualRoomBuilderError
-from virtual_room_builder.examples import default_scene
+from virtual_room_builder.examples import default_floorplan, default_scene
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="virtual-room-builder",
-        description="Render a 3D room layout with matplotlib.",
+        description="Render a bundled 3D room or floorplan example with matplotlib.",
+    )
+    parser.add_argument(
+        "--example",
+        choices=("room", "floorplan"),
+        default="room",
+        help="Which bundled example to render (default: room).",
     )
     parser.add_argument(
         "--output",
@@ -42,12 +48,13 @@ def main(argv: list[str] | None = None) -> int:
 
         matplotlib.use("Agg")
 
-    scene = default_scene()
-
     try:
-        fig = scene.figure()
+        if args.example == "floorplan":
+            fig = default_floorplan().figure()
+        else:
+            fig = default_scene().figure()
     except VirtualRoomBuilderError as exc:
-        print(f"Scene validation failed: {exc}", file=sys.stderr)
+        print(f"Validation failed: {exc}", file=sys.stderr)
         return 1
 
     if args.output:
