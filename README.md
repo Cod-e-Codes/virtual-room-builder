@@ -1,9 +1,7 @@
 # Virtual Room Builder
 
-Compose and render simple 3D room layouts with matplotlib.
-
-Wireframe walls, floors, and furniture with bounds checking so a piece
-placed outside the room fails loudly instead of rendering wrong.
+Compose and render simple 3D room layouts with matplotlib. Wireframe walls,
+floors, and furniture.
 
 ![Example room](screenshot.png)
 
