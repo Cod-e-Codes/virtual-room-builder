@@ -1,54 +1,79 @@
+# Virtual Room Builder
 
-# 3D Room and Furniture Visualization
+Compose and render simple 3D room layouts with matplotlib. Wireframe walls,
+floors, and furniture with bounds checking so a piece placed outside the room
+fails loudly instead of rendering wrong.
 
-This project is a Python-based application that uses Matplotlib to create and visualize a 3D room and its furniture. The visualization includes elements such as chairs, tables, lamps, bookshelves, doors, and the room structure itself. This tool can be used to design and showcase basic 3D layouts of rooms.
+Licensed under the MIT License.
 
-## Features
-
-- Render a customizable 3D room.
-- Add furniture such as chairs, tables, lamps, and bookshelves.
-- Plot doors in customizable locations.
-- Interactive 3D visualization using Matplotlib.
-
-## Requirements
-
-Ensure you have the following Python libraries installed:
-
-- `matplotlib`
-- `numpy`
-
-To install the required libraries, run:
+## Install
 
 ```bash
-pip install -r requirements.txt
+pip install -e ".[dev]"
 ```
 
-## How to Run
+Requires Python 3.10+.
 
-1. Clone the repository or download the project files.
-2. Ensure the required libraries are installed.
-3. Run the `main.py` script to generate the 3D visualization:
+## Run
 
 ```bash
-python main.py
+virtual-room-builder
 ```
 
-## Screenshots
+Opens an interactive matplotlib window with the example room. To write an image
+instead of opening a window:
 
-### Example Visualization
-![Example Visualization](./screenshot.PNG)
+```bash
+virtual-room-builder --output room.png
+```
 
-## File Structure
+## Screenshot
 
-- **main.py**: The entry point for the application.
-- **room.py**: Defines the room's structure and visualization logic.
-- **door.py**: Contains logic for plotting doors.
-- **furniture modules**: Individual files for plotting various furniture items like chairs, tables, and lamps.
-- **requirements.txt**: Lists the required Python libraries.
+![Example room](screenshot.png)
 
-## Created By
+## Use as a library
 
-This project was created by [CodēCodes](https://www.cod-e-codes.com/).
+```python
+from virtual_room_builder import Room, Scene, Chair, Table, Direction
 
-- Website: [CodēCodes](https://www.cod-e-codes.com/)
-- GitHub: [Cod-e-Codes](https://github.com/Cod-e-Codes/)
+scene = Scene(room=Room(length=12, width=10, height=3))
+scene.add(Chair(x=3, y=3, direction=Direction.NORTH, color="black"))
+scene.add(Table(x=2, y=2, length=3, width=3, top_height=0.75, color="peru"))
+
+fig = scene.figure()  # validates containment first, then renders
+fig.savefig("room.png")
+```
+
+Furniture pieces are dataclasses: `Chair`, `Table`, `Lamp`, `Bookshelf`,
+`Couch`. Each takes an `x`, `y` anchor (the local origin corner) and a
+`Direction` (`NORTH`, `SOUTH`, `EAST`, `WEST`). Chair, table, lamp, and couch
+rotate about that anchor. Bookshelf uses facing-dependent extents:
+north/south run length along x, east/west along y, with depth toward the
+facing side.
+
+`Door` takes an `orientation` of `"horizontal"` or `"vertical"`. Horizontal
+doors must sit on the south (y=0) or north wall; vertical doors must sit on
+the west (x=0) or east wall.
+
+`Scene.figure()` and `Scene.validate()` check room containment for furniture
+and wall attachment for doors. They do not currently detect
+furniture-to-furniture overlap. `Scene.render(ax)` draws without validating.
+
+## Development
+
+```bash
+pytest
+ruff check src tests
+mypy src
+```
+
+## Project layout
+
+- `src/virtual_room_builder/geometry.py` - shared rotation and box math
+- `src/virtual_room_builder/room.py` - the room shell
+- `src/virtual_room_builder/door.py` - doorway markers
+- `src/virtual_room_builder/furniture/` - chair, table, lamp, bookshelf, couch
+- `src/virtual_room_builder/scene.py` - composes a room with its furniture, validates fit
+- `src/virtual_room_builder/cli.py` - command-line entry point
+- `src/virtual_room_builder/examples.py` - the default example scene
+- `tests/` - pytest suite covering geometry, each furniture item, and scene validation
