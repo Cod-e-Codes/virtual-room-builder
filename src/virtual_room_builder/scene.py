@@ -44,8 +44,10 @@ class Scene:
     def render(self, ax: Axes3D) -> None:
         """Draw the scene onto an existing axes without validating first.
 
-        Call validate() or figure() when you need containment and placement
-        checks before drawing.
+        Line segments are Line3DCollections, split along their length. Draw
+        order uses the farther floor-plan end of each piece. Call validate()
+        or figure() when you need containment and placement checks before
+        drawing.
         """
         self.room.render(ax)
         for door in self.doors:

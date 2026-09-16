@@ -69,7 +69,9 @@ class Table(Furniture):
         ]
         self._draw_edges(ax, top_edges, self.color, linewidth=1.5)
 
+        legs = []
         for corner in top:
             bottom = corner.copy()
             bottom[2] = 0.0
-            ax.plot(*zip(bottom, corner, strict=True), color=self.color, linewidth=1.2)
+            legs.append((bottom, corner))
+        self._draw_edges(ax, legs, self.color, linewidth=1.2)

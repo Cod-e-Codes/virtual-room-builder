@@ -52,11 +52,15 @@ the west (x=0) or east wall.
 
 `Scene.figure()` and `Scene.validate()` check room containment for furniture
 and wall attachment for doors. They do not detect furniture-to-furniture
-overlap. `Scene.render(ax)` draws without validating.
+overlap. `Scene.render(ax)` draws without validating. Wireframe edges are
+matplotlib `Line3DCollection`s, split along their length. Draw order uses the
+farther floor-plan end of each piece, so receding floor and wall edges sit
+behind objects in the room.
 
 ## Project layout
 
 - `src/virtual_room_builder/geometry.py` - shared rotation and box math
+- `src/virtual_room_builder/draw.py` - 3D line collections, long edges split, depth from the farther floor-plan end
 - `src/virtual_room_builder/room.py` - the room shell
 - `src/virtual_room_builder/door.py` - doorway markers
 - `src/virtual_room_builder/furniture/` - chair, table, lamp, bookshelf, couch

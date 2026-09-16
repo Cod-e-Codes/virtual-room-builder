@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from virtual_room_builder.draw import add_segments
 from virtual_room_builder.errors import InvalidDimensionError, OutOfBoundsError
 from virtual_room_builder.geometry import Bounds, Direction, FloatArray
 
@@ -20,9 +21,9 @@ class Furniture(ABC):
     x, y is the anchor point on the floor in room coordinates.
     direction is the compass direction the item faces.
 
-    All items are drawn as wireframes. matplotlib's Axes3D does not
-    depth-sort filled faces reliably against other artists, so solid
-    fills produce z-fighting from most camera angles.
+    All items are drawn as wireframes. Each edge is split into short
+    Line3DCollections. Draw order uses the farther floor-plan end of each
+    piece. Filled faces still z-fight from most camera angles.
     """
 
     x: float
@@ -73,5 +74,4 @@ class Furniture(ABC):
         color: str,
         linewidth: float = 1.0,
     ) -> None:
-        for start, end in edges:
-            ax.plot(*zip(start, end, strict=True), color=color, linewidth=linewidth)
+        add_segments(ax, edges, color=color, linewidth=linewidth)

@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from virtual_room_builder.draw import add_segments
 from virtual_room_builder.errors import InvalidDimensionError
 from virtual_room_builder.geometry import box_edges, box_vertices
 
@@ -35,5 +36,4 @@ class Room:
 
     def render(self, ax: Axes3D) -> None:
         vertices = box_vertices(0, 0, 0, self.length, self.width, self.height)
-        for start, end in box_edges(vertices):
-            ax.plot(*zip(start, end, strict=True), color=self.wall_color, linewidth=1.5)
+        add_segments(ax, box_edges(vertices), color=self.wall_color, linewidth=1.5)

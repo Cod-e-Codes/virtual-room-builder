@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
+from virtual_room_builder.draw import add_segments
 from virtual_room_builder.errors import InvalidDimensionError
 from virtual_room_builder.furniture.base import Furniture
 from virtual_room_builder.geometry import Bounds, FloatArray, rotate_xy
@@ -109,5 +110,4 @@ class Couch(Furniture):
 
     def render(self, ax: Axes3D) -> None:
         v = self._placed_vertices()
-        for i, j in self._EDGES:
-            ax.plot(*zip(v[i], v[j], strict=True), color=self.color, linewidth=1.2)
+        add_segments(ax, [(v[i], v[j]) for i, j in self._EDGES], color=self.color, linewidth=1.2)

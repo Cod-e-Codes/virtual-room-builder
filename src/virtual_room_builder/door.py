@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
+from virtual_room_builder.draw import add_segments
 from virtual_room_builder.errors import (
     InvalidDimensionError,
     InvalidPlacementError,
@@ -99,6 +100,9 @@ class Door:
 
     def render(self, ax: Axes3D) -> None:
         v = self._vertices()
-        edges = [(0, 1), (1, 2), (2, 3), (3, 0)]
-        for i, j in edges:
-            ax.plot(*zip(v[i], v[j], strict=True), color=self.color, linewidth=2)
+        add_segments(
+            ax,
+            [(v[0], v[1]), (v[1], v[2]), (v[2], v[3]), (v[3], v[0])],
+            color=self.color,
+            linewidth=2,
+        )
