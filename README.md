@@ -1,37 +1,34 @@
 # Virtual Room Builder
 
-Compose and render simple 3D room layouts with matplotlib. Wireframe walls,
-floors, and furniture with bounds checking so a piece placed outside the room
-fails loudly instead of rendering wrong.
+Compose and render simple 3D room layouts with matplotlib.
 
-Licensed under the MIT License.
+Wireframe walls, floors, and furniture with bounds checking so a piece
+placed outside the room fails loudly instead of rendering wrong.
+
+![Example room](screenshot.png)
 
 ## Install
+
+Requires Python 3.10+.
 
 ```bash
 pip install -e ".[dev]"
 ```
 
-Requires Python 3.10+.
-
-## Run
+## Usage
 
 ```bash
 virtual-room-builder
 ```
 
-Opens an interactive matplotlib window with the example room. To write an image
+Opens an interactive matplotlib window with the example room. Write an image
 instead of opening a window:
 
 ```bash
 virtual-room-builder --output room.png
 ```
 
-## Screenshot
-
-![Example room](screenshot.png)
-
-## Use as a library
+Use as a library:
 
 ```python
 from virtual_room_builder import Room, Scene, Chair, Table, Direction
@@ -56,16 +53,8 @@ doors must sit on the south (y=0) or north wall; vertical doors must sit on
 the west (x=0) or east wall.
 
 `Scene.figure()` and `Scene.validate()` check room containment for furniture
-and wall attachment for doors. They do not currently detect
-furniture-to-furniture overlap. `Scene.render(ax)` draws without validating.
-
-## Development
-
-```bash
-pytest
-ruff check src tests
-mypy src
-```
+and wall attachment for doors. They do not detect furniture-to-furniture
+overlap. `Scene.render(ax)` draws without validating.
 
 ## Project layout
 
@@ -77,3 +66,17 @@ mypy src
 - `src/virtual_room_builder/cli.py` - command-line entry point
 - `src/virtual_room_builder/examples.py` - the default example scene
 - `tests/` - pytest suite covering geometry, each furniture item, and scene validation
+
+## Contributing
+
+Pull requests are welcome. Open an issue first for larger changes. Run:
+
+```bash
+pytest
+ruff check src tests
+mypy src
+```
+
+## License
+
+MIT © 2026 Cody Marsengill. See [LICENSE](LICENSE).
